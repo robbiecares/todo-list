@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "../library"
+		},
+		{
+			"path": "../restaurant"
+		},
+		{
+			"path": "../scratch"
+		},
+		{
+			"path": "../ticTacToe"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../webpack-demo"
+		}
+	]
+}
