@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+html, body, #work-area {
+    height: 100%;
+}
+
+#content{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-size: 5rem;
+}
+
+#work-area {
+    display: flex;
+    /* align-items: stretch; */
+}
+
+#menu {
+    display: flex;
+    flex-flow: column;
+    background-color: aqua;
+    width: fit-content;
+}
+
+.source {
+    font-size: 1.5rem;
+    color: black;
+    margin: .25rem;
+    margin-top: auto;
+}
+
+#projects-area {
+    /* flex: 3; */
+
+}
+
+footer {
+    margin-top: auto;
+}
+
+
