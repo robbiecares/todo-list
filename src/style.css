@@ -17,12 +17,13 @@ html, body, #work-area {
 
 nav {
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
 }
 
 h1 {
-    font-size: 5rem;
+    font-size: 3rem;
+    margin-right: auto;
 }
 
 #work-area {
@@ -30,11 +31,23 @@ h1 {
     /* align-items: stretch; */
 }
 
-#menu {
+#sidebar {
     display: flex;
     flex-flow: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
     background-color: aqua;
     width: fit-content;
+}
+
+#addBtn {
+   font-size: 1rem;
+   padding: .5rem; 
+}
+
+.label {
+    margin-left: .5rem;
 }
 
 .source {

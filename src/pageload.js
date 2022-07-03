@@ -1,6 +1,7 @@
 // overview page ()
 
 function createPage() {
+    let content = undefined;
     document.title = 'ToDo!'
     const body = document.getElementsByTagName('body')[0]
     let anchor = document.createElement('div')
@@ -10,25 +11,55 @@ function createPage() {
     const nav = document.createElement('nav')    
     anchor.appendChild(nav)
 
+    // content = document.createElement('i')
+    // nav.appendChild(content)
+    // content.classList.add("fa-solid", "fa-bars")
+
+    content = document.createElement('h1')
+    nav.appendChild(content)
+    content.textContent = "ToDo"
+
     const workArea = document.createElement('div')
     anchor.appendChild(workArea)
     workArea.id = 'work-area'
     
     
-    const menu = document.createElement('div')
-    workArea.appendChild(menu)
-    menu.id = 'menu'
+    const sidebar = document.createElement('div')
+    workArea.appendChild(sidebar)
+    sidebar.id = 'sidebar'
+
+    const addBtn = document.createElement('button')
+    sidebar.appendChild(addBtn)
+    addBtn.id = 'addBtn'
+    addBtn.addEventListener('click', showAddOptions)
+
+    content = document.createElement('i')
+    addBtn.appendChild(content)
+    content.classList.add("fa-solid", "fa-plus")
+    
+    content = document.createElement('span')
+    addBtn.appendChild(content)
+    content.textContent = 'New'
+    content.classList.add('label')
+    
+    const modal = document.createElement('div')
+    // document.
+
+    function showAddOptions() {
+
+    }
 
     const projectList = document.createElement('div')
-    menu.appendChild(projectList)
+    sidebar.appendChild(projectList)
     projectList.id = 'project-list'
     projectList.textContent = 'List of Projects'
 
     const source = document.createElement('a')
-    menu.appendChild(source)
+    sidebar.appendChild(source)
     source.href = 'https://github.com/robbiecares/todo-list'
     source.target = '_blank'
     source.classList.add('source')
+
 
     content = document.createElement('i')
     source.appendChild(content)
@@ -38,14 +69,6 @@ function createPage() {
     workArea.appendChild(content)
     content.id = 'projects-area'
 
-
-    // content = document.createElement('i')
-    // nav.appendChild(content)
-    // content.classList.add("fa-solid", "fa-bars")
-
-    content = document.createElement('h1')
-    nav.appendChild(content)
-    content.textContent = "ToDo"
 
     // content = document.createElement('i')
     // nav.appendChild(content)
