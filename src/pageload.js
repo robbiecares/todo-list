@@ -1,6 +1,11 @@
+import * as storage from './storage';
+
+
 // overview page ()
 
 function createPage() {
+    // Creates the required DOM elements for the initial page load.
+
     let content = undefined;
     document.title = 'ToDo!'
     const body = document.getElementsByTagName('body')[0]
@@ -43,16 +48,16 @@ function createPage() {
     content.classList.add('label')
     
     const modal = document.createElement('div')
-    // document.
 
     function showAddOptions() {
-
+        // Displays a menu that allows a user to choose between creating a new project or task.
+        
     }
 
     const projectList = document.createElement('div')
     sidebar.appendChild(projectList)
     projectList.id = 'project-list'
-    projectList.textContent = 'List of Projects'
+    projectList.textContent = storage.getProjects()
 
     const source = document.createElement('a')
     sidebar.appendChild(source)
@@ -79,7 +84,6 @@ function createPage() {
     // const footer = document.createElement('footer')
     // anchor.appendChild(footer)
 }   
-
 
 
 // project view modal
