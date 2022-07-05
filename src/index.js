@@ -5,3 +5,10 @@ import './style.css';
 import * as pageload from './pageload'
 import * as project from './project';
 
+
+localStorage.clear()
+localStorage.setItem('projects', JSON.stringify([new project.Project('beer'), new project.Project('cake')])) 
+
+// new project.Project('moose')
+
+console.log('end')

@@ -34,4 +34,10 @@ function save(key, value) {
 
 }
 
-export {storageAvailable, save}
+function getProjectNames() {
+    // Returns a list of projects names.
+    let projects = JSON.parse(localStorage.getItem('projects'))
+    return projects ? projects.map(project => project.name) : null
+}
+
+export {storageAvailable, save, getProjectNames}

@@ -1,6 +1,5 @@
 import * as storage from './storage';
 
-
 // overview page ()
 
 function createPage() {
@@ -54,10 +53,10 @@ function createPage() {
         
     }
 
-    const projectList = document.createElement('div')
+    const projectList = document.createElement('ul')
     sidebar.appendChild(projectList)
     projectList.id = 'project-list'
-    projectList.textContent = storage.getProjects()
+    populateList(projectList)
 
     const source = document.createElement('a')
     sidebar.appendChild(source)
@@ -100,5 +99,15 @@ function createPage() {
 
 
 createPage()
+
+
+function populateList(parent) {
+    // Builds a list of projects from local storage data.
+    storage.getProjectNames().forEach(projectName => {
+        let element = document.createElement('li')
+        element.textContent = projectName
+        parent.appendChild(element)    
+    });
+}
 
 // export {createPage as default}
