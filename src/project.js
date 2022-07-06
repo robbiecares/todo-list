@@ -11,15 +11,15 @@ import PubSub from 'pubsub-js'
 class Project {
     constructor(name) {
         this.name = name || prompt('Enter Name:')   
-        this.save()
+        // this.save()
+        PubSub.publish('new_project_created', this);
     }
 
     save() {
         // Validates that a project with the same name does not exist before adding the project object to local storage.
         
-        PubSub.publish('new_project_created', {
-            name: this.name
-        });
+        
+        console.log('saved')
         
         // // check existing storage for 'projects'
         // let data = JSON.parse(localStorage.getItem('projects'))
@@ -41,7 +41,7 @@ class Project {
 
     updateProjectList() {
         const element = document.getElementById('project-list')
-        element.textContent = storage.getProjectNames()
+        element.textContent = storage.storageManager.getProjectNames()
     }
     
 }

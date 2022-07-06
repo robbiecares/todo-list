@@ -1,8 +1,20 @@
+import { add } from 'date-fns';
+import { Project } from './project';
 import * as storage from './storage';
 
 // overview page ()
 
-function createPage() {
+new class UI {
+    // This class will manage all creation and maintenance of the user interface.
+
+    constructor() {
+        this.createPage()
+        PubSub.subscribe('new_project_created', (tag, data) => {
+            console.log(data)
+        })     
+    }
+
+    createPage() {
     // Creates the required DOM elements for the initial page load.
 
     let content = undefined;
@@ -40,6 +52,7 @@ function createPage() {
     content = document.createElement('i')
     addBtn.appendChild(content)
     content.classList.add("fa-solid", "fa-plus")
+    addBtn.addEventListener('click', () => {new Project}) 
     
     content = document.createElement('span')
     addBtn.appendChild(content)
@@ -53,10 +66,10 @@ function createPage() {
         
     }
 
-    const projectList = document.createElement('ul')
-    sidebar.appendChild(projectList)
-    projectList.id = 'project-list'
-    populateList(projectList)
+    this.projectList = document.createElement('ul')
+    sidebar.appendChild(this.projectList)
+    this.projectList.id = 'project-list'
+    this.updateProjectList(this.projectList)
 
     const source = document.createElement('a')
     sidebar.appendChild(source)
@@ -82,8 +95,21 @@ function createPage() {
 
     // const footer = document.createElement('footer')
     // anchor.appendChild(footer)
-}   
+    }   
 
+    updateProjectList(parent) {
+        // Builds a list of projects from local storage data.
+        const projects = storage.getProjectNames()
+        if (projects) {
+            for (let i = 0; i < projects.length; i++) {
+                let projectName = projects[i]
+                let element = document.createElement('li')
+                element.textContent = projectName
+                parent.appendChild(element)    
+            };
+        }
+    }
+}
 
 // project view modal
     // view and edit a project's task in "full screen" 
@@ -98,16 +124,8 @@ function createPage() {
 
 
 
-createPage()
 
 
-function populateList(parent) {
-    // Builds a list of projects from local storage data.
-    storage.getProjectNames().forEach(projectName => {
-        let element = document.createElement('li')
-        element.textContent = projectName
-        parent.appendChild(element)    
-    });
-}
+
 
 // export {createPage as default}
