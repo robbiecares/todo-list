@@ -9,9 +9,10 @@ new class UI {
 
     constructor() {
         this.createPage()
-        PubSub.subscribe('new_project_created', (tag, data) => {
-            console.log(data)
-        })     
+        PubSub.subscribe('new_project_saved', (tag, data) => {
+            this.updateProjectList(data)
+        });
+        document.addEventListener('onload', this.loadData)
     }
 
     createPage() {
@@ -47,12 +48,13 @@ new class UI {
     const addBtn = document.createElement('button')
     sidebar.appendChild(addBtn)
     addBtn.id = 'addBtn'
-    addBtn.addEventListener('click', showAddOptions)
+    addBtn.addEventListener('click', this.createProject
+    // console.log(this.createProject)
+    ) 
 
     content = document.createElement('i')
     addBtn.appendChild(content)
     content.classList.add("fa-solid", "fa-plus")
-    addBtn.addEventListener('click', () => {new Project}) 
     
     content = document.createElement('span')
     addBtn.appendChild(content)
@@ -61,15 +63,14 @@ new class UI {
     
     const modal = document.createElement('div')
 
-    function showAddOptions() {
-        // Displays a menu that allows a user to choose between creating a new project or task.
+    // function showAddOptions() {
+    //     // Displays a menu that allows a user to choose between creating a new project or task.
         
-    }
+    // }
 
     this.projectList = document.createElement('ul')
     sidebar.appendChild(this.projectList)
     this.projectList.id = 'project-list'
-    this.updateProjectList(this.projectList)
 
     const source = document.createElement('a')
     sidebar.appendChild(source)
@@ -97,17 +98,30 @@ new class UI {
     // anchor.appendChild(footer)
     }   
 
-    updateProjectList(parent) {
+    loadData() {
+        // Populates DOM elements with the relevant data from local storage.
+        this.updateProjectList(this.projectList)
+    }
+
+
+    updateProjectList(data) {
         // Builds a list of projects from local storage data.
-        const projects = storage.getProjectNames()
-        if (projects) {
-            for (let i = 0; i < projects.length; i++) {
-                let projectName = projects[i]
-                let element = document.createElement('li')
-                element.textContent = projectName
-                parent.appendChild(element)    
-            };
-        }
+        
+        data = data.projects
+        this.projectList.innerHTML = ''
+
+        for (let i = 0; i < data.length; i++) {
+            let element = document.createElement('li')
+            element.textContent = data[i].name
+            this.projectList.appendChild(element)    
+        };
+
+        console.log('project list updated')
+    }
+    
+
+    createProject() {
+        new Project().save()
     }
 }
 

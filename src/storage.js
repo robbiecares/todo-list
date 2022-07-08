@@ -1,12 +1,14 @@
-class storageManager {
+import PubSub from "pubsub-js";
+
+new class storageManager {
     // This class handles all calls to the local storage API.
 
+    projects;
+
     constructor() {
+        this.projects = [];
         PubSub.subscribe('new_project_created', (tag, data) => {
-            console.log(data)
-            console.log(localStorage)
-            localStorage.setItem('potato', data.name)
-            console.log(localStorage)
+            this.addProject(data)
         });
     }
 
@@ -37,31 +39,20 @@ class storageManager {
     
     }
 
+    addProject(data) {
+        // Saves a new project object to local storage.
 
-    save(key, value) {
+        const topic = 'new_project_saved'
+        this.projects = this.projects.concat([data])
 
-        if (storageAvailable('localStorage')) {
-            // Yippee! We can use localStorage awesomeness
-                
-            // access any existing data 
-            let data = localStorage.getItem(key)
-        }
-
-    }
-
-
-    getProjectNames() {
-        // Returns a list of projects names.
-        let projects = JSON.parse(localStorage.getItem('projects'))
-        return projects ? projects.map(project => project.name) : null
+        localStorage.setItem(data.constructor.name, JSON.stringify(this.projects));
+        PubSub.publish(topic, {
+            projects: this.projects
+        });
+        console.log(this.projects)
+        console.log(topic)
     }
 }
 
-function getProjectNames() {
-    // Returns a list of projects names.
-    const projects = JSON.parse(localStorage.getItem('projects'))
-    return projects ? projects.map(project => project.name) : null
-};
 
-
-export {storageManager, getProjectNames}
+export {}
