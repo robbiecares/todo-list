@@ -10,10 +10,10 @@ new class UI {
     constructor() {
         this.createPage()
         PubSub.subscribe('new_project_saved', (tag, data) => {
-            this.updateProjectList(data)
+            this.updateDisplay(data)
         });
         PubSub.subscribe('page_loaded', (tag, data) => {
-            this.updateProjectList(data)
+            this.updateDisplay(data)
         });
     }
 
@@ -38,13 +38,13 @@ new class UI {
     nav.appendChild(content)
     content.textContent = "ToDo"
 
-    const workArea = document.createElement('div')
-    anchor.appendChild(workArea)
-    workArea.id = 'work-area'
+    this.workArea = document.createElement('div')
+    anchor.appendChild(this.workArea)
+    this.workArea.id = 'work-area'
     
     
     const sidebar = document.createElement('div')
-    workArea.appendChild(sidebar)
+    this.workArea.appendChild(sidebar)
     sidebar.id = 'sidebar'
 
     const addBtn = document.createElement('button')
@@ -85,9 +85,9 @@ new class UI {
     source.appendChild(content)
     content.classList.add('fab', 'fa-github')
 
-    content = document.createElement('div')
-    workArea.appendChild(content)
-    content.id = 'projects-area'
+    this.projectArea = document.createElement('div')
+    this.workArea.appendChild(this.projectArea)
+    this.projectArea.id = 'project-area'
 
 
     // content = document.createElement('i')
@@ -101,14 +101,21 @@ new class UI {
     }   
 
 
+    updateDisplay(data) {
+        // Calls all function necessary for updating the display when data is accessed.
+        this.updateProjectList(data['Project'])
+        this.projectArea.innerHTML = ''
+        data['Project'].forEach(project => this.createCard(project));
+    }
+
+
     updateProjectList(data) {
         // Builds a list of projects from local storage data.
         
-        if (!data['Project']) {
+        if (!data) {
             return;
         }
 
-        data = data['Project']
         this.projectList.innerHTML = ''
 
         for (let i = 0; i < data.length; i++) {
@@ -125,6 +132,44 @@ new class UI {
         new Project().save()
     }
 
+
+    createCard(data) {
+        const card = document.createElement('div')
+        this.projectArea.appendChild(card)
+        card.classList.add('card')
+
+        
+        // data container
+        const cardData = document.createElement('div')
+        cardData.classList.add('card-data')
+        card.appendChild(cardData)
+
+        // control container
+        const cardControls = document.createElement('div')
+        cardControls.classList.add('card-controls')
+        card.appendChild(cardControls)
+    
+        // control content
+        const removeBtn = document.createElement('i')
+        removeBtn.classList.add('control', 'fa-solid', 'fa-x')
+        // removeBtn.addEventListener('click', (e) => this.remove(e))
+        cardControls.appendChild(removeBtn)
+    
+        const editBtn = document.createElement('i')
+        editBtn.classList.add('control')
+        editBtn.classList.add('fa-solid', 'fa-pen')
+        // editBtn.addEventListener('click', () => this.openCard())
+        cardControls.appendChild(editBtn)
+
+        // data content
+        let content = document.createElement('div')
+        cardData.appendChild(content)
+        content.classList.add('title')
+        content.innerHTML = data.name
+        this.titleElement = content
+
+        console.log('card created')
+    }
 }
 
 // project view modal

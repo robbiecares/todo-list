@@ -87,8 +87,13 @@ new class storageManager {
     sendAllData() {
         // Returns an object of all parsed values from local storage.
 
+        if (!localStorage.length) {
+            return;
+        }
+        
         const topic = 'page_loaded'
-        let data = {}     
+        let data = {}
+        
         for (let i=0; i<localStorage.length; i++) {
             let key = localStorage.key(i);
             data[key] = this.store.get(key);
