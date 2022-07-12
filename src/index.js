@@ -9,5 +9,5 @@ import * as project from './project';
 
 
 // localStorage.clear()
-// new project.Project('cooking').save()
+// new project.Project('johnson').save()
 // new project.Project('coding').save()

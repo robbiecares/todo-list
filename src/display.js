@@ -104,11 +104,11 @@ new class UI {
     updateProjectList(data) {
         // Builds a list of projects from local storage data.
         
-        if (!data.length) {
+        if (!data['Project']) {
             return;
         }
 
-        data = JSON.parse(data['Project'])
+        data = data['Project']
         this.projectList.innerHTML = ''
 
         for (let i = 0; i < data.length; i++) {

@@ -21,9 +21,25 @@ new class storageManager {
         PubSub.subscribe('new_project_created', (tag, data) => {
             this.addProject(data)
         });
-        window.onload = this.sendAllData
-        
+        window.onload = this.sendAllData.bind(this)        
     }
+
+
+    // store() {        
+    //         return {
+    //         set: (key, value) => localStorage[key] = JSON.stringify(value),
+    //         get: function(key) {
+    //             try {
+    //                 return JSON.parse(localStorage[key])
+    //             } 
+    //             catch(e) {
+    //                 if (e instanceof SyntaxError) {
+    //                     return undefined
+    //                 }
+    //             }
+    //         }
+    //     }
+    // };
 
 
     storageAvailable(type) {
@@ -69,10 +85,16 @@ new class storageManager {
 
 
     sendAllData() {
-        // send all available storage data to display after initial page load.
+        // Returns an object of all parsed values from local storage.
 
-        const topic = 'page_loaded'        
-        PubSub.publish(topic, localStorage);
+        const topic = 'page_loaded'
+        let data = {}     
+        for (let i=0; i<localStorage.length; i++) {
+            let key = localStorage.key(i);
+            data[key] = this.store.get(key);
+        };
+
+        PubSub.publish(topic, data);
         console.log(topic)
     }
 

@@ -23,7 +23,6 @@ Project.prototype.isValid = function() {
     if (!this.name) {
         isValid = false
     }
-    // console.log(projectManager)
 
     // if (projectManager.projectNames && !projectManager.projectNames.includes(this.name)) {
     //         this.save()
@@ -37,7 +36,6 @@ Project.prototype.save = function() {
     if (this.isValid()) {
         const topic = 'new_project_created'
         PubSub.publish(topic, 
-            // {name: this.name}
             this
         );
         console.log(topic)
