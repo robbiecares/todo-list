@@ -3,10 +3,11 @@ import '@fortawesome/fontawesome-free/js/brands';
 import '@fortawesome/fontawesome-free/js/solid';
 import './style.css';
 import './display';
+import './storage';
 import * as project from './project';
 
 
-// localStorage.setItem('projects', JSON.stringify([new project.Project('beer'), new project.Project('cake')])) 
 
-// let moose = new project.Project('moose')
-// moose.save()
+// localStorage.clear()
+// new project.Project('cooking').save()
+// new project.Project('coding').save()

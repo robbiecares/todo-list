@@ -75,5 +75,5 @@ new class storageManager {
         PubSub.publish(topic, localStorage);
         console.log(topic)
     }
-   
+
 }

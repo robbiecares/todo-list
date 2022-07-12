@@ -1,18 +1,20 @@
-import { add } from 'date-fns';
 import { Project } from './project';
-import * as storage from './storage';
+
 
 // overview page ()
 
 new class UI {
     // This class will manage all creation and maintenance of the user interface.
 
+
     constructor() {
         this.createPage()
         PubSub.subscribe('new_project_saved', (tag, data) => {
             this.updateProjectList(data)
         });
-        document.addEventListener('onload', this.loadData)
+        PubSub.subscribe('page_loaded', (tag, data) => {
+            this.updateProjectList(data)
+        });
     }
 
     createPage() {
@@ -98,16 +100,15 @@ new class UI {
     // anchor.appendChild(footer)
     }   
 
-    loadData() {
-        // Populates DOM elements with the relevant data from local storage.
-        this.updateProjectList(this.projectList)
-    }
-
 
     updateProjectList(data) {
         // Builds a list of projects from local storage data.
         
-        data = data.projects
+        if (!data.length) {
+            return;
+        }
+
+        data = JSON.parse(data['Project'])
         this.projectList.innerHTML = ''
 
         for (let i = 0; i < data.length; i++) {
@@ -123,6 +124,7 @@ new class UI {
     createProject() {
         new Project().save()
     }
+
 }
 
 // project view modal
