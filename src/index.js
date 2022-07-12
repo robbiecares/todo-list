@@ -3,7 +3,7 @@ import '@fortawesome/fontawesome-free/js/brands';
 import '@fortawesome/fontawesome-free/js/solid';
 import './style.css';
 import './display';
-import './storage';
+import './data';
 import * as project from './project';
 
 
