@@ -10,7 +10,8 @@ class Project {
     // A class to hold all data related to a specific project.
 
     constructor(name) {
-        this.name = name || prompt('Enter Name:')   
+        this.name = name || prompt('Enter Name:')
+        this.id = Date.now()  
     }
 }
 

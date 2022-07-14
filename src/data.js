@@ -21,6 +21,9 @@ new class storageManager {
         PubSub.subscribe('new_project_created', (tag, data) => {
             this.addProject(data)
         });
+        PubSub.subscribe('remove_project', (tag, data) => {
+            this.removeProject(data)
+        }); 
         window.onload = this.sendAllData.bind(this)        
     }
 
@@ -81,6 +84,15 @@ new class storageManager {
             'Project': this.store.get('Project')
         });
         console.log(topic)
+    }
+
+
+    removeProject(data) {
+        // Removes a project from local storage.
+
+        const projects  = this.store.get('Project').filter(project => project.id != data.id)
+        this.store.set('Project', projects)
+        console.log('project removed from storage')
     }
 
 

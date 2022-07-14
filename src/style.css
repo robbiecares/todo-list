@@ -62,6 +62,7 @@ h1 {
     display: flex;
     flex-flow: row wrap;
     /* justify-content: space-between; */
+    align-content: flex-start;
     gap: 1rem;
     padding: 0 1rem;
         
@@ -90,12 +91,16 @@ h1 {
     align-items: center;
   }
 
+svg {
+    pointer-events: auto;
+}
+
 .card-data {
     display: flex;
     flex-flow: column;
     flex: 1;
     font-size: 1.5rem;
-    padding: .25rem;
+    /* padding: .25rem; */
 }
 
 .title {

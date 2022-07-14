@@ -53,7 +53,7 @@ new class UI {
     addBtn.addEventListener('click', this.createProject
     // console.log(this.createProject)
     ) 
-
+    
     content = document.createElement('i')
     addBtn.appendChild(content)
     content.classList.add("fa-solid", "fa-plus")
@@ -129,15 +129,22 @@ new class UI {
     
 
     createProject() {
+        // Lets user define the name of a new project.
+        
         new Project().save()
+        // const topic = 'new_project_requested'
+        // PubSub.publish(topic);
+        // console.log(topic)
     }
 
 
     createCard(data) {
+        // Creates a card to display details related to a project.
+
         const card = document.createElement('div')
         this.projectArea.appendChild(card)
+        card.setAttribute('data-id', data.id)
         card.classList.add('card')
-
         
         // data container
         const cardData = document.createElement('div')
@@ -150,28 +157,58 @@ new class UI {
         card.appendChild(cardControls)
     
         // control content
+        let wrapper = document.createElement('div')
+        cardControls.appendChild(wrapper)
+        wrapper.addEventListener('click', (e) => this.removeProject(e))
+        
         const removeBtn = document.createElement('i')
+        wrapper.appendChild(removeBtn)
         removeBtn.classList.add('control', 'fa-solid', 'fa-x')
-        // removeBtn.addEventListener('click', (e) => this.remove(e))
-        cardControls.appendChild(removeBtn)
-    
+        
+        wrapper = document.createElement('div')
+        cardControls.appendChild(wrapper)
+        wrapper.addEventListener('click', (e) => this.editProject(e))
+
         const editBtn = document.createElement('i')
+        wrapper.appendChild(editBtn)
         editBtn.classList.add('control')
         editBtn.classList.add('fa-solid', 'fa-pen')
-        // editBtn.addEventListener('click', () => this.openCard())
-        cardControls.appendChild(editBtn)
-
+        
         // data content
         let content = document.createElement('div')
         cardData.appendChild(content)
         content.classList.add('title')
         content.innerHTML = data.name
-        this.titleElement = content
+        removeBtn.addEventListener('click', (e) => this.removeProject(e))
+
 
         console.log('card created')
     }
-}
 
+
+    removeProject(e) {
+        // Requests removal of a project from the display and the localStorage.
+        
+        // this.element.remove()
+        const topic = 'remove_project'
+        const card = e.target.closest('.card')
+        const name = card.querySelector('.title').textContent 
+        const id = card.getAttribute('data-id')        
+        const x = Array.from(this.projectList.childNodes).filter(project => project.textContent == name)
+        this.projectList.removeChild(...x)
+        card.remove()
+        
+        PubSub.publish(topic, {
+            id: id
+        });
+
+    }
+
+    editProject(e) {
+        // Opens a modal that allows project details to be edited and updated in local storage.
+        console.log('project details opened')
+    }
+}
 // project view modal
     // view and edit a project's task in "full screen" 
 
