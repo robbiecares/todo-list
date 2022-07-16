@@ -1,5 +1,3 @@
-import PubSub from 'pubsub-js'
-
 // this module will contain a project class.
 // The project class should contain:
     
@@ -11,7 +9,7 @@ class Project {
 
     constructor(name) {
         this.name = name || prompt('Enter Name:')
-        this.id = Date.now()  
+        this.id = Date.now()
     }
 }
 

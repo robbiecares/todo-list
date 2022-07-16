@@ -1,3 +1,4 @@
+import { add } from 'date-fns';
 import { Project } from './project';
 
 
@@ -8,7 +9,7 @@ new class UI {
 
 
     constructor() {
-        this.createPage()
+        this.createLayout()
         PubSub.subscribe('new_project_saved', (tag, data) => {
             this.updateDisplay(data)
         });
@@ -17,93 +18,184 @@ new class UI {
         });
     }
 
-    createPage() {
-    // Creates the required DOM elements for the initial page load.
 
-    let content = undefined;
-    document.title = 'ToDo!'
-    const body = document.getElementsByTagName('body')[0]
-    let anchor = document.createElement('div')
-    body.appendChild(anchor)
-    anchor.id = 'content'
+    createLayout() {
+        // Creates the required DOM elements for the initial page load.
 
-    const nav = document.createElement('nav')    
-    anchor.appendChild(nav)
+        document.title = 'ToDo!'
+        const body = document.getElementsByTagName('body')[0]
+        const anchor = document.createElement('div')
+        body.appendChild(anchor)
+        anchor.id = 'content'
 
-    // content = document.createElement('i')
-    // nav.appendChild(content)
-    // content.classList.add("fa-solid", "fa-bars")
-
-    content = document.createElement('h1')
-    nav.appendChild(content)
-    content.textContent = "ToDo"
-
-    this.workArea = document.createElement('div')
-    anchor.appendChild(this.workArea)
-    this.workArea.id = 'work-area'
-    
-    
-    const sidebar = document.createElement('div')
-    this.workArea.appendChild(sidebar)
-    sidebar.id = 'sidebar'
-
-    const addBtn = document.createElement('button')
-    sidebar.appendChild(addBtn)
-    addBtn.id = 'addBtn'
-    addBtn.addEventListener('click', this.createProject
-    // console.log(this.createProject)
-    ) 
-    
-    content = document.createElement('i')
-    addBtn.appendChild(content)
-    content.classList.add("fa-solid", "fa-plus")
-    
-    content = document.createElement('span')
-    addBtn.appendChild(content)
-    content.textContent = 'New'
-    content.classList.add('label')
-    
-    const modal = document.createElement('div')
-
-    // function showAddOptions() {
-    //     // Displays a menu that allows a user to choose between creating a new project or task.
+        // this.modal = this.createModal(anchor);
+        this.nav = this.createNav(anchor)
         
-    // }
+        this.workArea = document.createElement('div')
+        anchor.appendChild(this.workArea)
+        this.workArea.id = 'work-area'
 
-    this.projectList = document.createElement('ul')
-    sidebar.appendChild(this.projectList)
-    this.projectList.id = 'project-list'
+        // this.sidebar = this.createSidebar(this.workArea)
 
-    const source = document.createElement('a')
-    sidebar.appendChild(source)
-    source.href = 'https://github.com/robbiecares/todo-list'
-    source.target = '_blank'
-    source.classList.add('source')
+        const form = this.createForm(this.workArea)
 
 
-    content = document.createElement('i')
-    source.appendChild(content)
-    content.classList.add('fab', 'fa-github')
+        this.projectArea = document.createElement('div')
+        this.workArea.appendChild(this.projectArea)
+        this.projectArea.id = 'project-area'
 
-    this.projectArea = document.createElement('div')
-    this.workArea.appendChild(this.projectArea)
-    this.projectArea.id = 'project-area'
+        // content = document.createElement('i')
+        // nav.appendChild(content)
+        // content.classList.add("fa-solid", "fa-gear")
 
-
-    // content = document.createElement('i')
-    // nav.appendChild(content)
-    // content.classList.add("fa-solid", "fa-gear")
-
+        // const footer = document.createElement('footer')
+        // anchor.appendChild(footer)
+    }
 
 
-    // const footer = document.createElement('footer')
-    // anchor.appendChild(footer)
-    }   
+    createModal(parent) {
+        // Creates a new div element to use as a modal for new object creation.
 
+        const modal = document.createElement('div')
+        parent.appendChild(modal)
+        modal.id = 'modal'
+        
+        const modalContent = document.createElement('div')
+        modal.appendChild(modalContent)
+        modalContent.id = 'modal-content'
+        
+        // const form = this.createForm(modalContent)
+
+        // alternate modal close (looks for clicks outside of the modal)
+        window.addEventListener('click', (e) => {
+            if (e.target == modal) {
+                modal.style.display = "none";
+            }
+        })
+        return modal
+    }
+
+
+    createNav(parent) {
+        
+        const nav = document.createElement('nav')    
+        parent.appendChild(nav)
+
+        // content = document.createElement('i')
+        // nav.appendChild(content)
+        // content.classList.add("fa-solid", "fa-bars")
+
+        let content = document.createElement('h1')
+        nav.appendChild(content)
+        content.textContent = "ToDo"
+
+        return nav
+    }
+
+
+    createSidebar(parent) {
+
+        const sidebar = document.createElement('div')
+        parent.appendChild(sidebar)
+        sidebar.id = 'sidebar'
+
+        const addBtn = document.createElement('button')
+        sidebar.appendChild(addBtn)
+        addBtn.id = 'addBtn'
+        addBtn.addEventListener('click', this.createProject.bind(this)) 
+        
+        content = document.createElement('i')
+        addBtn.appendChild(content)
+        content.classList.add("fa-solid", "fa-plus")
+        
+        content = document.createElement('span')
+        addBtn.appendChild(content)
+        content.textContent = 'New'
+        content.classList.add('label')
+
+        this.projectList = document.createElement('ul')
+        sidebar.appendChild(this.projectList)
+        this.projectList.id = 'project-list'
+
+        const source = document.createElement('a')
+        sidebar.appendChild(source)
+        source.href = 'https://github.com/robbiecares/todo-list'
+        source.target = '_blank'
+        source.classList.add('source')
+
+        content = document.createElement('i')
+        source.appendChild(content)
+        content.classList.add('fab', 'fa-github')
+
+        return sidebar
+    }
+
+
+    createForm(parent) {
+
+        const form = document.createElement('form')
+        parent.appendChild(form)
+        form.id = 'todo-form'
+
+        const firstToDo = addFieldSet('text', 'todo', 'create a new to-do item...')
+        firstToDo.addEventListener('click', () => addFieldSet('text', 'list-name', 'Title'))
+        
+    
+        function createInput(type, name, placeholder) {
+            // Creates an input for new project form.
+
+            // only add the title field if it doesn't exist
+            if (name === 'list-name' && form[name]) {
+                return;
+            }
+            
+            // ***error after Title is added***
+
+
+            const input = document.createElement('input')
+            input.type = type
+            input.id = name || undefined
+            input.setAttribute('placeholder', placeholder)
+            input.setAttribute('name', name)
+
+            return input
+        
+        }
+            
+        function createLabel(input) {
+            // Handles creation and attribute setting for labels.
+
+            const label = document.createElement('label')
+            
+            
+            if (input.id === 'list-name') {
+                form.prepend(label)
+            } else {
+                form.appendChild(label)
+            }    
+            
+            label.appendChild(input)
+            label.setAttribute('for', input.id)
+            label.setAttribute('form', form.id)    
+    
+            return label
+        }
+
+        function addFieldSet(type, name, placeholder=name, idName=name) {
+            // Creates a new label and input set for a form.
+
+            const input = createInput(type, name, placeholder)
+            if (input) {
+                return createLabel(input)
+            }
+        }
+
+        return form
+    }
 
     updateDisplay(data) {
         // Calls all function necessary for updating the display when data is accessed.
-        this.updateProjectList(data['Project'])
+        // this.updateProjectList(data['Project'])
         this.projectArea.innerHTML = ''
         data['Project'].forEach(project => this.createCard(project));
     }
@@ -130,8 +222,11 @@ new class UI {
 
     createProject() {
         // Lets user define the name of a new project.
+        this.modal.style.display = 'flex'
+
+
         
-        new Project().save()
+        // new Project().save()
         // const topic = 'new_project_requested'
         // PubSub.publish(topic);
         // console.log(topic)
@@ -145,6 +240,8 @@ new class UI {
         this.projectArea.appendChild(card)
         card.setAttribute('data-id', data.id)
         card.classList.add('card')
+        card.addEventListener('click', (e) => this.editProject(e))
+
         
         // data container
         const cardData = document.createElement('div')
@@ -167,12 +264,21 @@ new class UI {
         
         wrapper = document.createElement('div')
         cardControls.appendChild(wrapper)
-        wrapper.addEventListener('click', (e) => this.editProject(e))
+        wrapper.addEventListener('click', (e) => this.createTask(e))
 
-        const editBtn = document.createElement('i')
-        wrapper.appendChild(editBtn)
-        editBtn.classList.add('control')
-        editBtn.classList.add('fa-solid', 'fa-pen')
+        // const editBtn = document.createElement('i')
+        // wrapper.appendChild(editBtn)
+        // editBtn.classList.add('control')
+        // editBtn.classList.add('fa-solid', 'fa-pen')
+
+        // wrapper = document.createElement('div')
+        // cardControls.appendChild(wrapper)
+        // wrapper.addEventListener('click', (e) => this.editProject(e))
+
+        // const editBtn = document.createElement('i')
+        // wrapper.appendChild(editBtn)
+        // editBtn.classList.add('control')
+        // editBtn.classList.add('fa-solid', 'fa-pen')
         
         // data content
         let content = document.createElement('div')
@@ -180,6 +286,11 @@ new class UI {
         content.classList.add('title')
         content.innerHTML = data.name
         removeBtn.addEventListener('click', (e) => this.removeProject(e))
+
+        // todo container
+        content = document.createElement('div')
+        cardData.appendChild(content)
+        content.classList.add('todos')
 
 
         console.log('card created')
@@ -204,13 +315,26 @@ new class UI {
 
     }
 
+
     editProject(e) {
         // Opens a modal that allows project details to be edited and updated in local storage.
+
+        console.log('project details opened')
+    }
+
+
+    createTask() {
+        // Opens a modal that allows project details to be edited and updated in local storage.
+
+        this.modal.style.display = 'flex'
         console.log('project details opened')
     }
 }
+
 // project view modal
     // view and edit a project's task in "full screen" 
+
+
 
 
 

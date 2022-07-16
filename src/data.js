@@ -1,5 +1,3 @@
-import PubSub from "pubsub-js";
-
 new class storageManager {
     // This class handles all calls to the local storage API.
 
